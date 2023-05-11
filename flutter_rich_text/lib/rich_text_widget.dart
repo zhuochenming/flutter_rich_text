@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class RichTextWidget extends StatefulWidget {
   ///文本
   final String text;
@@ -15,31 +14,37 @@ class RichTextWidget extends StatefulWidget {
   ///回调
   final Function() callback;
 
+  ///行数，不传 默认为1
+  final int maxLines;
+
   ///字体样式
-  TextStyle? style;
+  final TextStyle? style;
 
   ///附加字体样式
-  TextStyle? additionStyle;
+  final TextStyle? additionStyle;
 
-  ///行数，不传 默认为1
-  int maxLines;
-
-  RichTextWidget(this.text, this.additionText, this.maxWidth, this.callback,
-      {this.style, this.additionStyle, this.maxLines = 1, Key? key})
+  const RichTextWidget(
+      {Key? key,
+      required this.text,
+      required this.additionText,
+      required this.callback,
+      required this.maxWidth,
+      this.maxLines = 1,
+      this.style,
+      this.additionStyle})
       : super(key: key);
 
   @override
-  _RichTextWidgetState createState() => _RichTextWidgetState();
+  RichTextWidgetState createState() => RichTextWidgetState();
 }
 
-class _RichTextWidgetState extends State<RichTextWidget> {
+class RichTextWidgetState extends State<RichTextWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: _didExceedMaxLines()
-          ? _showMoreText()
-          : Text(widget.text, style: widget.style),
-    );
+        child: _didExceedMaxLines()
+            ? _showMoreText()
+            : Text(widget.text, style: widget.style));
   }
 
   Widget _showMoreText() {
@@ -81,9 +86,8 @@ class _RichTextWidgetState extends State<RichTextWidget> {
     }
     kText = widget.text;
     kStyle = widget.style;
-    kExceedMaxLines =
-        _textPainterWithTextSpan([TextSpan(text: widget.text, style: widget.style)])
-            .didExceedMaxLines;
+    kExceedMaxLines = _textPainterWithTextSpan(
+        [TextSpan(text: widget.text, style: widget.style)]).didExceedMaxLines;
     return kExceedMaxLines;
   }
 
@@ -95,7 +99,7 @@ class _RichTextWidgetState extends State<RichTextWidget> {
       bool isExceed = widget.text.length < num + skip ||
           _textPainterWithTextSpan([
             TextSpan(
-                text: widget.text.substring(0, num + skip) + '...',
+                text: '${widget.text.substring(0, num + skip)}...',
                 style: widget.style),
             TextSpan(text: widget.additionText, style: widget.additionStyle)
           ]).didExceedMaxLines;
