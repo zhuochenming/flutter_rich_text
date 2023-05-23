@@ -1,75 +1,74 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class RichTextWidget extends StatefulWidget {
+class RichWidget extends StatefulWidget {
   ///文本
   final String text;
-
-  ///附加文本
-  final String additionText;
 
   ///最大宽度
   final double maxWidth;
 
-  ///回调
-  final Function() callback;
-
   ///行数，不传 默认为1
   final int maxLines;
+
+  final double appendWidth;
+  final Widget? appendWidget;
 
   ///字体样式
   final TextStyle? style;
 
-  ///附加字体样式
-  final TextStyle? additionStyle;
-
-  const RichTextWidget(
-      {Key? key,
-      required this.text,
-      required this.additionText,
-      required this.callback,
-      required this.maxWidth,
-      this.maxLines = 1,
-      this.style,
-      this.additionStyle})
-      : super(key: key);
+  const RichWidget({
+    Key? key,
+    required this.text,
+    required this.maxWidth,
+    this.maxLines = 1,
+    this.appendWidth = 0,
+    this.appendWidget,
+    this.style,
+  }) : super(key: key);
 
   @override
-  RichTextWidgetState createState() => RichTextWidgetState();
+  RichWidgetState createState() => RichWidgetState();
 }
 
-class RichTextWidgetState extends State<RichTextWidget> {
+class RichWidgetState extends State<RichWidget> {
   String kText = '';
   int kMaxLines = 0;
   int kFontCount = 0;
   TextStyle? kStyle;
+
   bool kExceedMaxLines = false;
 
   @override
   Widget build(BuildContext context) {
+    if (widget.appendWidget == null) {
+      return SizedBox(
+          width: widget.maxWidth,
+          child: FutureBuilder(
+              future: _didExceedMaxLines(),
+              builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+                return _showMoreText();
+              }));
+    }
+
     return SizedBox(
         width: widget.maxWidth,
         child: FutureBuilder(
             future: _didExceedMaxLines(),
             builder: (BuildContext ctx, AsyncSnapshot snapshot) {
-              return _showMoreText();
+              return Row(children: [_showMoreText(), widget.appendWidget!]);
             }));
   }
 
   Widget _showMoreText() {
-    String content = widget.text.substring(0, kFontCount);
+    if (kFontCount < 1) {
+      return Container();
+    }
+    String content = widget.text.substring(0, kFontCount - 1);
     return RichText(
         maxLines: widget.maxLines,
         text: TextSpan(children: [
           TextSpan(text: content, style: widget.style),
-          TextSpan(text: kExceedMaxLines ? '...' : '', style: widget.style),
-          TextSpan(
-              text: widget.additionText,
-              style: widget.additionStyle,
-              recognizer: TapGestureRecognizer()
-                ..onTap = () {
-                  widget.callback();
-                })
+          TextSpan(text: kExceedMaxLines ? '...' : '', style: widget.style)
         ]));
   }
 
@@ -78,7 +77,7 @@ class RichTextWidgetState extends State<RichTextWidget> {
         maxLines: widget.maxLines,
         text: TextSpan(children: children),
         textDirection: TextDirection.ltr)
-      ..layout(maxWidth: widget.maxWidth);
+      ..layout(maxWidth: widget.maxWidth - widget.appendWidth);
   }
 
   ///文字是否超出
@@ -106,8 +105,7 @@ class RichTextWidgetState extends State<RichTextWidget> {
           _textPainterWithTextSpan([
             TextSpan(
                 text: '${widget.text.substring(0, num + skip)}...',
-                style: widget.style),
-            TextSpan(text: widget.additionText, style: widget.additionStyle)
+                style: widget.style)
           ]).didExceedMaxLines;
       if (!isExceed) {
         num = num + skip;
