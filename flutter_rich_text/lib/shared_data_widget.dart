@@ -3,8 +3,7 @@ import 'package:flutter/cupertino.dart';
 class SharedDataWidget extends InheritedWidget {
   final int data; //需要在子树中共享的数据，保存点击次数
 
-  const SharedDataWidget({Key? key, required this.data, required Widget child})
-      : super(key: key, child: child);
+  const SharedDataWidget({super.key, required this.data, required super.child});
 
   //定义一个便捷方法，方便子树中的widget获取共享数据
   static SharedDataWidget? of(BuildContext context) {

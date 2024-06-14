@@ -4,8 +4,8 @@ import 'package:flutter_rich_text/rich_text_widget.dart';
 class ReaderWidget extends StatefulWidget {
   final String text;
   final int line;
-  const ReaderWidget({Key? key, required this.text, required this.line})
-      : super(key: key);
+
+  const ReaderWidget({super.key, required this.text, required this.line});
 
   @override
   State<StatefulWidget> createState() {

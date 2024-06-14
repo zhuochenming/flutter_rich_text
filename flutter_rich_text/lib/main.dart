@@ -10,22 +10,24 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: '图文混排',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: '图文混排'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({super.key, required this.title});
+
   final String title;
 
   @override
@@ -91,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
             appendWidth: 120,
             appendWidget: ElevatedButton(
               style: const ButtonStyle(
-                  fixedSize: MaterialStatePropertyAll(Size(120, 44))),
+                  fixedSize: WidgetStatePropertyAll(Size(120, 44))),
               onPressed: () {
                 setState(() {});
 

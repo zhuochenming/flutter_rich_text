@@ -16,15 +16,14 @@ class RichWidget extends StatefulWidget {
   ///字体样式
   final TextStyle? style;
 
-  const RichWidget({
-    Key? key,
-    required this.text,
-    required this.maxWidth,
-    this.maxLines = 1,
-    this.appendWidth = 0,
-    this.appendWidget,
-    this.style,
-  }) : super(key: key);
+  const RichWidget(
+      {super.key,
+      required this.text,
+      required this.maxWidth,
+      this.maxLines = 1,
+      this.appendWidth = 0,
+      this.appendWidget,
+      this.style});
 
   @override
   RichWidgetState createState() => RichWidgetState();

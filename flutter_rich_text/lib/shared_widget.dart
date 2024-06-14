@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_rich_text/shared_data_widget.dart';
 
 class SharedWidget extends StatefulWidget {
-  const SharedWidget({Key? key}) : super(key: key);
+  const SharedWidget({super.key});
 
   @override
   State<StatefulWidget> createState() {

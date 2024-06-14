@@ -24,15 +24,14 @@ class RichTextWidget extends StatefulWidget {
   final TextStyle? additionStyle;
 
   const RichTextWidget(
-      {Key? key,
+      {super.key,
       required this.text,
       required this.additionText,
       required this.callback,
       required this.maxWidth,
       this.maxLines = 1,
       this.style,
-      this.additionStyle})
-      : super(key: key);
+      this.additionStyle});
 
   @override
   RichTextWidgetState createState() => RichTextWidgetState();
